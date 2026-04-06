@@ -83,11 +83,7 @@
 					<input class="form-control mb-2" placeholder="Project Title" bind:value={titleName} />
 					<textarea class="form-control mb-2" placeholder="Description" bind:value={desc}
 					></textarea>
-					<input
-						class="form-control mb-3"
-						placeholder="Image URL (e.g. https://...)"
-						bind:value={imageUrl}
-					/>
+					<input class="form-control mb-3" placeholder="Image URL" bind:value={imageUrl} />
 					<div class="d-flex gap-2">
 						<button type="button" class="btn btn-primary w-100" onclick={addProject}
 							>Add Project</button
@@ -134,8 +130,8 @@
 		<div class="col-lg-8">
 			<h2 class="mb-4 display-5 fw-bold">Resume</h2>
 			<p class="lead mb-4">
-				Aspiring Software Engineer with a focus on full-stack development and problem-solving.
-				Currently pursuing a B.S. in Computer Science at California State University, Fullerton.
+				Aspiring Software Engineer with a focus on full stack development and problem solving.
+				Currently pursuing a B.S. in Computer Science at California State University of Fullerton.
 			</p>
 
 			<div class="mb-5">
