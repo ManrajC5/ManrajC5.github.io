@@ -1,206 +1,529 @@
 <script>
-	let projects = $state([
+	import { onMount } from 'svelte';
+
+	let activeSection = $state('home');
+
+	onMount(() => {
+		const sections = document.querySelectorAll('section[id]');
+		const observer = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) {
+					if (entry.isIntersecting) {
+						activeSection = entry.target.id;
+					}
+				}
+			},
+			{ threshold: 0.3 }
+		);
+		sections.forEach((s) => observer.observe(s));
+		return () => observer.disconnect();
+	});
+
+	const projects = [
 		{
-			title: 'Project 1',
-			description: 'A cool app I built.',
-			image: 'https://picsum.photos/300/200'
+			title: 'Web Application',
+			description:
+				'A full-stack web application built with modern technologies and best practices for scalable, maintainable code.',
+			image: 'https://picsum.photos/seed/proj1/600/400',
+			tags: ['Svelte', 'Node.js', 'Bootstrap']
+		},
+		{
+			title: 'Data Visualizer',
+			description:
+				'Interactive data visualization dashboard with real-time updates and dynamic charts for insightful analytics.',
+			image: 'https://picsum.photos/seed/proj2/600/400',
+			tags: ['Python', 'R', 'D3.js']
+		},
+		{
+			title: 'CLI Tool',
+			description:
+				'Command-line utility for automating development workflows and boosting productivity across teams.',
+			image: 'https://picsum.photos/seed/proj3/600/400',
+			tags: ['C++', 'Git', 'Linux']
 		}
-	]);
+	];
 
-	let titleName = $state('');
-	let desc = $state('');
-	let imageUrl = $state('');
-
-	let givePrompts = $state(false);
-
-	function addProject() {
-		if (titleName && desc) {
-			projects.push({
-				title: titleName,
-				description: desc,
-				image: imageUrl || 'https://picsum.photos/300'
-			});
-			titleName = '';
-			desc = '';
-			imageUrl = '';
-			givePrompts = false;
-		}
-	}
-
-	function handleDeleteProject(index) {
-		projects.splice(index, 1);
-	}
+	const skillCategories = [
+		{ name: 'Languages', items: ['C++', 'JavaScript', 'Python', 'R'] },
+		{ name: 'Frameworks', items: ['Svelte', 'Bootstrap', 'Node.js'] },
+		{ name: 'Tools', items: ['Git/GitHub', 'VS Code', 'Linux', 'RStudio'] }
+	];
 </script>
 
-<div class="py-5 text-white text-center">
-	<h1 class="display-1 fw-bold">Manraj's Portfolio</h1>
-	<p class="lead">Computer Science Student @ CSUF</p>
-</div>
-
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
-	<div class="container-fluid">
-		<div class="navbar-collapse justify-content-center">
-			<ul class="navbar-nav">
-				<li class="nav-item"><a class="nav-link px-3" href="#">Home</a></li>
-				<li class="nav-item"><a class="nav-link px-3" href="#projects">Projects</a></li>
-				<li class="nav-item"><a class="nav-link px-3" href="#resume">Resume</a></li>
-				<li class="nav-item"><a class="nav-link px-3" href="#socials">Socials</a></li>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top portfolio-nav">
+	<div class="container">
+		<a class="navbar-brand logo-text" href="#home">Manraj Chahal</a>
+		<button
+			class="navbar-toggler border-0"
+			type="button"
+			data-bs-toggle="collapse"
+			data-bs-target="#navMenu"
+		>
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse justify-content-end" id="navMenu">
+			<ul class="navbar-nav gap-1">
+				{#each ['home', 'about', 'projects', 'skills', 'resume', 'contact'] as section}
+					<li class="nav-item">
+						<a
+							class="nav-link px-3"
+							class:active={activeSection === section}
+							href="#{section}"
+						>
+							{section.charAt(0).toUpperCase() + section.slice(1)}
+						</a>
+					</li>
+				{/each}
 			</ul>
 		</div>
 	</div>
 </nav>
 
-<div id="about" class="py-5 text-white container">
-	<div class="row align-items-center">
-		<div class="col-md-6">
-			<h2 class="mb-4 border-bottom pb-2">About Me</h2>
-			<p class="lead">
-				My name is Manraj Chahal, and I am a Computer Science Student at Cal State University of
-				Fullerton.
-			</p>
-			<p class="text-secondary">
-				I'm passionate about building efficient projects and exploring new web technologies.
-			</p>
-		</div>
-		<div class="col-md-6 text-center">
-			<img
-				src="/headshot.jpg"
-				alt="Manraj"
-				class="rounded-circle shadow-lg border-secondary border border-3"
-				style="width:250px; height: 250px; object-fit: cover;"
-			/>
+<!-- Hero -->
+<section id="home" class="min-vh-100 d-flex align-items-center justify-content-center text-center px-3">
+	<div class="container">
+		<p class="text-uppercase ls-wide accent-text fw-semibold mb-3">Hello, I'm</p>
+		<h1 class="display-3 display-md-1 fw-bold mb-3 hero-name">Manraj Chahal</h1>
+		<p class="lead text-secondary mb-4">Computer Science Student @ CSUF</p>
+		<div class="accent-line mx-auto mb-4"></div>
+		<div class="d-flex gap-2 gap-sm-3 justify-content-center flex-wrap">
+			<a href="#projects" class="btn btn-gradient px-3 px-sm-4">View Projects</a>
+			<a
+				href="/Manraj_Chahal_Resume.pdf"
+				target="_blank"
+				class="btn btn-outline-secondary px-3 px-sm-4"
+			>
+				Download Resume
+			</a>
 		</div>
 	</div>
-</div>
+</section>
 
-<div id="projects" class="pb-5 text-white container">
-	<div class="row justify-content-center text-center">
-		<h2 class="mb-4 display-5 fw-bold">My Projects</h2>
-
-		<div class="d-flex justify-content-center mb-5">
-			{#if givePrompts}
-				<div class="card p-4 bg-dark border-secondary w-100" style="max-width: 500px;">
-					<input class="form-control mb-2" placeholder="Project Title" bind:value={titleName} />
-					<textarea class="form-control mb-2" placeholder="Description" bind:value={desc}
-					></textarea>
-					<input class="form-control mb-3" placeholder="Image URL" bind:value={imageUrl} />
-					<div class="d-flex gap-2">
-						<button type="button" class="btn btn-primary w-100" onclick={addProject}
-							>Add Project</button
-						>
-						<button
-							type="button"
-							class="btn btn-outline-light"
-							onclick={() => (givePrompts = false)}>Cancel</button
-						>
+<!-- About -->
+<section id="about" class="py-section">
+	<div class="container">
+		<div class="text-center mb-5">
+			<p class="section-label">ABOUT ME</p>
+			<h2 class="display-5 fw-bold text-white">Get to know me</h2>
+		</div>
+		<div class="row align-items-center g-4 g-lg-5">
+			<div class="col-lg-5 text-center mb-4 mb-lg-0">
+				<div class="photo-wrapper">
+					<div class="photo-border"></div>
+					<img
+						src="/headshot.jpg"
+						alt="Manraj Chahal"
+						class="photo-img"
+					/>
+				</div>
+			</div>
+			<div class="col-lg-7 text-center text-lg-start">
+				<p class="text-secondary fs-6 fs-md-5 lh-lg">
+					My name is Manraj Chahal, and I am a Computer Science Student at Cal State University
+					of Fullerton. I'm passionate about building efficient projects and exploring new web
+					technologies.
+				</p>
+				<p class="text-secondary fs-6 fs-md-5 lh-lg">
+					I enjoy tackling complex problems and turning ideas into reality through clean,
+					maintainable code. When I'm not coding, you can find me exploring the latest in tech
+					or collaborating on exciting open-source projects.
+				</p>
+				<div class="d-flex gap-4 gap-sm-5 mt-4 justify-content-center justify-content-lg-start">
+					<div>
+						<h3 class="fw-bold accent-text mb-0">5+</h3>
+						<small class="text-secondary">Projects</small>
+					</div>
+					<div>
+						<h3 class="fw-bold accent-text mb-0">3+</h3>
+						<small class="text-secondary">Technologies</small>
+					</div>
+					<div>
+						<h3 class="fw-bold accent-text mb-0">2025</h3>
+						<small class="text-secondary">Grad Year</small>
 					</div>
 				</div>
-			{:else}
-				<button
-					type="button"
-					class="btn btn-lg btn-outline-light"
-					onclick={() => (givePrompts = true)}>+ ADD PROJECT</button
-				>
-			{/if}
+			</div>
 		</div>
+	</div>
+</section>
 
-		<div class="row justify-content-center">
-			{#each projects as project, index}
-				<div class="col-sm-12 col-md-6 col-lg-4 mb-4 d-flex justify-content-center">
-					<div class="project-card position-relative">
-						<img src={project.image} class="project-img" alt={project.title} />
-						<div class="p-3 text-white">
-							<h3 class="h5">{project.title}</h3>
-							<p class="small opacity-75">{project.description}</p>
-							<button
-								onclick={() => handleDeleteProject(index)}
-								class="btn-close btn-close-white position-absolute top-0 end-0 m-2"
-								aria-label="Delete"
-							></button>
+<!-- Projects -->
+<section id="projects" class="py-section bg-darker">
+	<div class="container">
+		<div class="text-center mb-5">
+			<p class="section-label">PORTFOLIO</p>
+			<h2 class="display-5 fw-bold text-white">Featured Projects</h2>
+		</div>
+		<div class="row g-4 justify-content-center">
+			{#each projects as project}
+				<div class="col-md-6 col-lg-4">
+					<div class="project-card h-100">
+						<img src={project.image} alt={project.title} class="project-card-img" />
+						<div class="p-4">
+							<h5 class="fw-semibold text-white mb-2">{project.title}</h5>
+							<p class="text-secondary small mb-3">{project.description}</p>
+							<div class="d-flex flex-wrap gap-2">
+								{#each project.tags as tag}
+									<span class="tag-badge">{tag}</span>
+								{/each}
+							</div>
 						</div>
 					</div>
 				</div>
 			{/each}
 		</div>
 	</div>
-</div>
+</section>
 
-<div id="resume" class="pb-5 text-white container">
-	<div class="row justify-content-center text-center">
-		<div class="col-lg-8">
-			<h2 class="mb-4 display-5 fw-bold">Resume</h2>
-			<p class="lead mb-4">
-				Aspiring Software Engineer with a focus on full stack development and problem solving.
-				Currently pursuing a B.S. in Computer Science at California State University of Fullerton.
-			</p>
-
-			<div class="mb-5">
-				<span class="badge rounded-pill bg-primary px-3 py-2 m-1">C++</span>
-				<span class="badge rounded-pill bg-info text-dark px-3 py-2 m-1">JavaScript</span>
-				<span class="badge rounded-pill bg-secondary px-3 py-2 m-1">Python</span>
-				<span class="badge rounded-pill bg-warning text-dark px-3 py-2 m-1">Svelte</span>
-				<span class="badge rounded-pill bg-dark border-light px-3 py-2 m-1 border">Git/GitHub</span>
-				<span class="badge rounded-pill bg-danger text-dark px-3 py-2 m-1">R/RStudio</span>
-			</div>
-
-			<div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
-				<a href="/Manraj_Chahal_Resume.pdf" target="_blank" class="btn btn-primary btn-lg px-5">
-					View Full Resume (PDF)
-				</a>
-				<a href="" class="btn btn-outline-light btn-lg px-5"> Contact Me </a>
-			</div>
+<!-- Skills -->
+<section id="skills" class="py-section">
+	<div class="container">
+		<div class="text-center mb-5">
+			<p class="section-label">SKILLS</p>
+			<h2 class="display-5 fw-bold text-white">Technologies I Work With</h2>
+		</div>
+		<div class="row g-4">
+			{#each skillCategories as category}
+				<div class="col-sm-6 col-md-4">
+					<div class="skill-card">
+						<h5 class="fw-semibold text-white mb-3">{category.name}</h5>
+						<div class="gradient-divider mb-3"></div>
+						<div class="d-flex flex-wrap gap-2">
+							{#each category.items as item}
+								<span class="skill-tag">{item}</span>
+							{/each}
+						</div>
+					</div>
+				</div>
+			{/each}
 		</div>
 	</div>
-</div>
+</section>
 
-<div id="socials" class="py-5 text-white bg-black bg-opacity-25 text-center">
-	<h2 class="mb-4">Connect with me!</h2>
-	<div class="d-flex justify-content-center gap-4">
-		<a href="https://www.linkedin.com/in/manraj-chahal-4508153b7/" class="social-icon">
-			<img src="/linkedin.png" alt="LinkedIn" width="40" height="40" />
-		</a>
-		<a href="https://github.com/ManrajC5" class="social-icon">
-			<img src="/githubIcon.jpg" alt="GitHub" width="40" height="40" class="rounded" />
+<!-- Resume -->
+<section id="resume" class="py-section bg-darker">
+	<div class="container text-center">
+		<p class="section-label">RESUME</p>
+		<h2 class="display-5 fw-bold text-white mb-4">Education & Experience</h2>
+		<p class="text-secondary fs-5 mx-auto mb-4" style="max-width: 700px;">
+			Aspiring Software Engineer with a focus on full stack development and problem solving.
+			Currently pursuing a B.S. in Computer Science at California State University of Fullerton.
+		</p>
+		<a href="/Manraj_Chahal_Resume.pdf" target="_blank" class="btn btn-gradient btn-lg px-5">
+			View Full Resume (PDF)
 		</a>
 	</div>
-</div>
+</section>
+
+<!-- Footer / Contact -->
+<section id="contact" class="py-5 bg-footer text-center">
+	<div class="container">
+		<h3 class="fw-semibold text-white mb-3">Let's Connect</h3>
+		<p class="text-secondary mb-4">
+			Feel free to reach out for collaborations or just a friendly hello!
+		</p>
+		<div class="d-flex justify-content-center gap-3 mb-4">
+			<a
+				href="https://www.linkedin.com/in/manraj-chahal-4508153b7/"
+				class="social-circle"
+				aria-label="LinkedIn"
+			>
+				<img src="/linkedin.png" alt="LinkedIn" width="22" height="22" />
+			</a>
+			<a href="https://github.com/ManrajC5" class="social-circle" aria-label="GitHub">
+				<img src="/githubIcon.jpg" alt="GitHub" width="22" height="22" class="rounded" />
+			</a>
+		</div>
+		<hr class="border-secondary opacity-10 mx-auto" style="max-width: 300px;" />
+		<p class="text-secondary small mt-3 mb-0">&copy; 2025 Manraj Chahal. All rights reserved.</p>
+	</div>
+</section>
 
 <style>
 	:global(body) {
-		background: linear-gradient(135deg, #1d2129, #0e1322);
-		background-attachment: fixed;
-		min-height: 100vh;
-		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+		background: #0f172a;
+		font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+		color: #e2e8f0;
+		overflow-x: hidden;
 	}
 
-	.project-card {
-		background: rgba(255, 255, 255, 0.05);
-		backdrop-filter: blur(12px);
-		border: 1px solid rgba(255, 255, 255, 0.1);
-		border-radius: 15px;
-		overflow: hidden;
+	/* -- Navbar -- */
+	.portfolio-nav {
+		background: rgba(15, 23, 42, 0.92);
+		backdrop-filter: blur(16px);
+		border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+		transition: background 0.3s;
+	}
+
+	.logo-text {
+		font-family: 'Satisfy', cursive;
+		font-weight: 400;
+		font-style: normal;
+		font-size: 1.5rem;
+		background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
+	.portfolio-nav .nav-link {
+		color: #94a3b8;
+		font-weight: 500;
+		font-size: 0.9rem;
+		transition: color 0.2s;
+	}
+
+	.portfolio-nav .nav-link:hover,
+	.portfolio-nav .nav-link.active {
+		color: #3b82f6;
+	}
+
+	/* -- Accent & Utilities -- */
+	.accent-text {
+		color: #3b82f6;
+	}
+
+	.ls-wide {
+		letter-spacing: 0.35em;
+		font-size: 0.95rem;
+	}
+
+	.section-label {
+		color: #3b82f6;
+		font-weight: 600;
+		font-size: 0.8rem;
+		letter-spacing: 0.35em;
+		margin-bottom: 0.75rem;
+	}
+
+	.py-section {
+		padding-top: 6rem;
+		padding-bottom: 6rem;
+	}
+
+	.bg-darker {
+		background: #0b0f1e;
+	}
+
+	.bg-footer {
+		background: #080c18;
+	}
+
+	/* -- Hero -- */
+	.hero-name {
+		background: linear-gradient(180deg, #ffffff 30%, #94a3b8 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
+	.accent-line {
+		width: 120px;
+		height: 4px;
+		border-radius: 2px;
+		background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+	}
+
+	/* -- Buttons -- */
+	.btn-gradient {
+		background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+		color: #fff;
+		border: none;
+		font-weight: 600;
+		border-radius: 8px;
+		transition: transform 0.2s, box-shadow 0.2s;
+	}
+
+	.btn-gradient:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+		color: #fff;
+	}
+
+	.btn-outline-secondary {
+		border-color: #94a3b8;
+		color: #94a3b8;
+		border-radius: 8px;
+		font-weight: 600;
+	}
+
+	.btn-outline-secondary:hover {
+		background: rgba(148, 163, 184, 0.1);
+		border-color: #cbd5e1;
+		color: #cbd5e1;
+	}
+
+	/* -- About Photo -- */
+	.photo-wrapper {
+		position: relative;
+		display: inline-block;
+	}
+
+	.photo-border {
+		position: absolute;
+		top: 20px;
+		left: 50%;
+		transform: translateX(-45%);
 		width: 100%;
-		transition:
-			transform 0.3s ease,
-			box-shadow 0.3s ease;
+		max-width: 300px;
+		aspect-ratio: 6 / 7;
+		border-radius: 16px;
+		border: 2px solid transparent;
+		background: linear-gradient(180deg, #3b82f6, #8b5cf6) border-box;
+		-webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+		mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+		-webkit-mask-composite: xor;
+		mask-composite: exclude;
+	}
+
+	.photo-img {
+		position: relative;
+		width: 100%;
+		max-width: 300px;
+		aspect-ratio: 6 / 7;
+		object-fit: cover;
+		border-radius: 16px;
+		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+	}
+
+	/* -- Project Cards -- */
+	.project-card {
+		background: rgba(30, 41, 59, 0.6);
+		border: 1px solid rgba(255, 255, 255, 0.08);
+		border-radius: 16px;
+		overflow: hidden;
+		transition: transform 0.3s, box-shadow 0.3s;
 	}
 
 	.project-card:hover {
-		transform: translateY(-10px);
-		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+		transform: translateY(-8px);
+		box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
 	}
 
-	.project-img {
+	.project-card-img {
 		width: 100%;
 		height: 200px;
 		object-fit: cover;
 	}
 
-	.social-icon {
-		transition: transform 0.2s;
+	.tag-badge {
+		background: rgba(59, 130, 246, 0.15);
+		color: #3b82f6;
+		font-size: 0.75rem;
+		font-weight: 500;
+		padding: 0.3rem 0.75rem;
+		border-radius: 20px;
 	}
 
-	.social-icon:hover {
-		transform: scale(1.2);
+	/* -- Skill Cards -- */
+	.skill-card {
+		background: rgba(30, 41, 59, 0.4);
+		border: 1px solid rgba(255, 255, 255, 0.06);
+		border-radius: 16px;
+		padding: 2rem;
+		height: 100%;
+	}
+
+	.gradient-divider {
+		height: 2px;
+		background: linear-gradient(90deg, rgba(59, 130, 246, 0.6), transparent);
+		border-radius: 1px;
+	}
+
+	.skill-tag {
+		background: #0f172a;
+		color: #94a3b8;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		font-size: 0.85rem;
+		font-weight: 500;
+		padding: 0.5rem 1rem;
+		border-radius: 8px;
+	}
+
+	/* -- Social -- */
+	.social-circle {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 48px;
+		height: 48px;
+		border-radius: 50%;
+		background: rgba(255, 255, 255, 0.08);
+		border: 1px solid rgba(255, 255, 255, 0.12);
+		transition: transform 0.2s, background 0.2s;
+	}
+
+	.social-circle:hover {
+		transform: scale(1.1);
+		background: rgba(59, 130, 246, 0.2);
+	}
+
+	/* -- Navbar collapse on mobile -- */
+	:global(.navbar-collapse) {
+		background: rgba(15, 23, 42, 0.98);
+		border-radius: 0 0 12px 12px;
+		padding: 0.5rem 0;
+	}
+
+	@media (min-width: 992px) {
+		:global(.navbar-collapse) {
+			background: transparent;
+			padding: 0;
+		}
+	}
+
+	/* -- Smooth scroll offset for fixed nav -- */
+	:global(html) {
+		scroll-behavior: smooth;
+		scroll-padding-top: 80px;
+	}
+
+	/* -- Mobile responsive -- */
+	@media (max-width: 767.98px) {
+		.py-section {
+			padding-top: 3.5rem;
+			padding-bottom: 3.5rem;
+		}
+
+		.hero-name {
+			font-size: 2.5rem;
+		}
+
+		.ls-wide {
+			letter-spacing: 0.2em;
+			font-size: 0.8rem;
+		}
+
+		.photo-border {
+			top: 15px;
+			max-width: 220px;
+		}
+
+		.photo-img {
+			max-width: 220px;
+		}
+
+		.project-card-img {
+			height: 160px;
+		}
+
+		.skill-card {
+			padding: 1.5rem;
+		}
+	}
+
+	@media (min-width: 768px) and (max-width: 991.98px) {
+		.hero-name {
+			font-size: 3.5rem;
+		}
+
+		.photo-border {
+			max-width: 260px;
+		}
+
+		.photo-img {
+			max-width: 260px;
+		}
 	}
 </style>
