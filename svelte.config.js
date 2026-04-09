@@ -15,9 +15,7 @@ const config = {
 	},
 	kit: {
 		adapter: adapter({
-			pages: 'build',
-			assets: 'build',
-			fallback: 'index.html' // critical for SPA routing
+			fallback: '404.html'
 		}),
 		paths: {
 			base: ''
