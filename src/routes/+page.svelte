@@ -62,15 +62,11 @@
 		>
 			<span class="navbar-toggler-icon"></span>
 		</button>
-		<div class="collapse navbar-collapse justify-content-end" id="navMenu">
+		<div class="navbar-collapse justify-content-end collapse" id="navMenu">
 			<ul class="navbar-nav gap-1">
 				{#each ['home', 'about', 'projects', 'skills', 'resume', 'contact'] as section}
 					<li class="nav-item">
-						<a
-							class="nav-link px-3"
-							class:active={activeSection === section}
-							href="#{section}"
-						>
+						<a class="nav-link px-3" class:active={activeSection === section} href="#{section}">
 							{section.charAt(0).toUpperCase() + section.slice(1)}
 						</a>
 					</li>
@@ -81,12 +77,15 @@
 </nav>
 
 <!-- Hero -->
-<section id="home" class="min-vh-100 d-flex align-items-center justify-content-center text-center px-3">
+<section
+	id="home"
+	class="min-vh-100 d-flex align-items-center justify-content-center px-3 text-center"
+>
 	<div class="container">
 		<p class="text-uppercase ls-wide accent-text fw-semibold mb-3">Hello, I'm</p>
 		<h1 class="display-3 display-md-1 fw-bold mb-3 hero-name">Manraj Chahal</h1>
-		<p class="lead text-secondary mb-4">Computer Science Student @ CSUF</p>
-		<div class="accent-line mx-auto mb-4"></div>
+		<p class="lead text-secondary mb-4">Computer Scientist Student @ CSUF</p>
+		<div class="accent-line mb-4 mx-auto"></div>
 		<div class="d-flex gap-2 gap-sm-3 justify-content-center flex-wrap">
 			<a href="#projects" class="btn btn-gradient px-3 px-sm-4">View Projects</a>
 			<a
@@ -103,31 +102,27 @@
 <!-- About -->
 <section id="about" class="py-section">
 	<div class="container">
-		<div class="text-center mb-5">
+		<div class="mb-5 text-center">
 			<p class="section-label">ABOUT ME</p>
 			<h2 class="display-5 fw-bold text-white">Get to know me</h2>
 		</div>
 		<div class="row align-items-center g-4 g-lg-5">
-			<div class="col-lg-5 text-center mb-4 mb-lg-0">
+			<div class="col-lg-5 mb-4 mb-lg-0 text-center">
 				<div class="photo-wrapper">
 					<div class="photo-border"></div>
-					<img
-						src="/headshot.jpg"
-						alt="Manraj Chahal"
-						class="photo-img"
-					/>
+					<img src="/headshot.jpg" alt="Manraj Chahal" class="photo-img" />
 				</div>
 			</div>
-			<div class="col-lg-7 text-center text-lg-start">
+			<div class="col-lg-7 text-lg-start text-center">
 				<p class="text-secondary fs-6 fs-md-5 lh-lg">
-					My name is Manraj Chahal, and I am a Computer Science Student at Cal State University
-					of Fullerton. I'm passionate about building efficient projects and exploring new web
+					My name is Manraj Chahal, and I am a Computer Science Student at Cal State University of
+					Fullerton. I'm passionate about building efficient projects and exploring new web
 					technologies.
 				</p>
 				<p class="text-secondary fs-6 fs-md-5 lh-lg">
 					I enjoy tackling complex problems and turning ideas into reality through clean,
-					maintainable code. When I'm not coding, you can find me exploring the latest in tech
-					or collaborating on exciting open-source projects.
+					maintainable code. When I'm not coding, you can find me exploring the latest in tech or
+					collaborating on exciting open-source projects.
 				</p>
 				<div class="d-flex gap-4 gap-sm-5 mt-4 justify-content-center justify-content-lg-start">
 					<div>
@@ -151,7 +146,7 @@
 <!-- Projects -->
 <section id="projects" class="py-section bg-darker">
 	<div class="container">
-		<div class="text-center mb-5">
+		<div class="mb-5 text-center">
 			<p class="section-label">PORTFOLIO</p>
 			<h2 class="display-5 fw-bold text-white">Featured Projects</h2>
 		</div>
@@ -163,7 +158,7 @@
 						<div class="p-4">
 							<h5 class="fw-semibold text-white mb-2">{project.title}</h5>
 							<p class="text-secondary small mb-3">{project.description}</p>
-							<div class="d-flex flex-wrap gap-2">
+							<div class="d-flex gap-2 flex-wrap">
 								{#each project.tags as tag}
 									<span class="tag-badge">{tag}</span>
 								{/each}
@@ -179,7 +174,7 @@
 <!-- Skills -->
 <section id="skills" class="py-section">
 	<div class="container">
-		<div class="text-center mb-5">
+		<div class="mb-5 text-center">
 			<p class="section-label">SKILLS</p>
 			<h2 class="display-5 fw-bold text-white">Technologies I Work With</h2>
 		</div>
@@ -189,7 +184,7 @@
 					<div class="skill-card">
 						<h5 class="fw-semibold text-white mb-3">{category.name}</h5>
 						<div class="gradient-divider mb-3"></div>
-						<div class="d-flex flex-wrap gap-2">
+						<div class="d-flex gap-2 flex-wrap">
 							{#each category.items as item}
 								<span class="skill-tag">{item}</span>
 							{/each}
@@ -206,7 +201,7 @@
 	<div class="container text-center">
 		<p class="section-label">RESUME</p>
 		<h2 class="display-5 fw-bold text-white mb-4">Education & Experience</h2>
-		<p class="text-secondary fs-5 mx-auto mb-4" style="max-width: 700px;">
+		<p class="text-secondary fs-5 mb-4 mx-auto" style="max-width: 700px;">
 			Aspiring Software Engineer with a focus on full stack development and problem solving.
 			Currently pursuing a B.S. in Computer Science at California State University of Fullerton.
 		</p>
@@ -235,7 +230,7 @@
 				<img src="/githubIcon.jpg" alt="GitHub" width="22" height="22" class="rounded" />
 			</a>
 		</div>
-		<hr class="border-secondary opacity-10 mx-auto" style="max-width: 300px;" />
+		<hr class="border-secondary mx-auto opacity-10" style="max-width: 300px;" />
 		<p class="text-secondary small mt-3 mb-0">&copy; 2025 Manraj Chahal. All rights reserved.</p>
 	</div>
 </section>
@@ -243,7 +238,12 @@
 <style>
 	:global(body) {
 		background: #0f172a;
-		font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+		font-family:
+			'Inter',
+			'Segoe UI',
+			system-ui,
+			-apple-system,
+			sans-serif;
 		color: #e2e8f0;
 		overflow-x: hidden;
 	}
@@ -332,7 +332,9 @@
 		border: none;
 		font-weight: 600;
 		border-radius: 8px;
-		transition: transform 0.2s, box-shadow 0.2s;
+		transition:
+			transform 0.2s,
+			box-shadow 0.2s;
 	}
 
 	.btn-gradient:hover {
@@ -371,8 +373,12 @@
 		border-radius: 16px;
 		border: 2px solid transparent;
 		background: linear-gradient(180deg, #3b82f6, #8b5cf6) border-box;
-		-webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-		mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+		-webkit-mask:
+			linear-gradient(#fff 0 0) padding-box,
+			linear-gradient(#fff 0 0);
+		mask:
+			linear-gradient(#fff 0 0) padding-box,
+			linear-gradient(#fff 0 0);
 		-webkit-mask-composite: xor;
 		mask-composite: exclude;
 	}
@@ -393,7 +399,9 @@
 		border: 1px solid rgba(255, 255, 255, 0.08);
 		border-radius: 16px;
 		overflow: hidden;
-		transition: transform 0.3s, box-shadow 0.3s;
+		transition:
+			transform 0.3s,
+			box-shadow 0.3s;
 	}
 
 	.project-card:hover {
@@ -451,7 +459,9 @@
 		border-radius: 50%;
 		background: rgba(255, 255, 255, 0.08);
 		border: 1px solid rgba(255, 255, 255, 0.12);
-		transition: transform 0.2s, background 0.2s;
+		transition:
+			transform 0.2s,
+			background 0.2s;
 	}
 
 	.social-circle:hover {
