@@ -84,7 +84,7 @@
 	<div class="container">
 		<p class="text-uppercase ls-wide accent-text fw-semibold mb-3">Hello, I'm</p>
 		<h1 class="display-3 display-md-1 fw-bold mb-3 hero-name">Manraj Chahal</h1>
-		<p class="lead text-secondary mb-4">Computer Scientist Student @ CSUF</p>
+		<p class="lead text-secondary mb-4">Computer Science Student @ CSUF</p>
 		<div class="accent-line mb-4 mx-auto"></div>
 		<div class="d-flex gap-2 gap-sm-3 justify-content-center flex-wrap">
 			<a href="#projects" class="btn btn-gradient px-3 px-sm-4">View Projects</a>
